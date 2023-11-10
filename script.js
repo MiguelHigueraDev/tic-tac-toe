@@ -1,11 +1,12 @@
 
 const GameBoard = function() {
-    const board = [
+    let board = [
     [""], [""], [""],
     [""], [""], [""],
     [""], [""], [""]
     ];
     const getBoard = () => board;
+    const resetBoard = () => board = [[""], [""], [""],[""], [""], [""],[""], [""], [""]];
 
     const getSquare = (index) => board[index][0]; 
     const setSquare = (index, content) => {
@@ -15,7 +16,7 @@ const GameBoard = function() {
         return true;
     }
 
-    return {getBoard, getSquare, setSquare};
+    return {getBoard, resetBoard, getSquare, setSquare};
 }();
 
 const MenuHandler = function() {
@@ -54,19 +55,27 @@ const MenuHandler = function() {
         const el = document.getElementById(id);
         el.classList.remove('hidden');
     }
-    return {setMenu}
+
+    const resetPlayers = () => {
+        player1Input.value = "";
+        player2Input.value = "";
+    }
+
+    return {setMenu, resetPlayers}
 }();
 
 const DisplayHandler = function() {
-
     const squares = document.querySelectorAll('.square');
     squares.forEach((el) => {
         el.addEventListener("click", () => Game.playTurn(el.id))
     })
 
     const currentPlayer = document.querySelector('.current-player');
+    const currentTurnText = document.querySelector('.current-turn-text');
     const winningPlayer = document.querySelector('.winning-player');
     const endGameText = document.querySelector('#end-game-text');
+    const restartButton = document.querySelector('#restart-game');
+    restartButton.addEventListener("click", () => Game.restartGame())
 
     const getSquareElement = (index) => document.getElementById(index);
 
@@ -80,6 +89,7 @@ const DisplayHandler = function() {
     const setGameResult = (winner) => {
         currentPlayer.parentElement.classList.add('hidden');
         endGameText.classList.remove('hidden');
+        restartButton.classList.remove('hidden');
         if(winner === false) {
             // TIE
             endGameText.textContent = "It's a tie! :("
@@ -97,7 +107,18 @@ const DisplayHandler = function() {
         })
     }
 
-    return {setSquare, highlightWinner, setCurrentPlayer, setGameResult}
+    const resetDisplay = () => {
+        currentPlayer.parentElement.classList.remove('hidden');
+        currentPlayer.textContent = "";
+        currentTurnText.classList.remove('hidden');
+        endGameText.classList.add('hidden');
+        squares.forEach((i) => {
+            i.classList.remove('square-winning');
+            i.firstChild.textContent = "";
+        });
+    }
+
+    return {setSquare, highlightWinner, setCurrentPlayer, setGameResult, resetDisplay}
 }();
 
 const Player = function(sy, na) {
@@ -106,6 +127,7 @@ const Player = function(sy, na) {
     const name = na;
     let wins = 0;
 
+    // TODO: keep track of wins
     const getWins = () => wins;
     const addWin = () => wins =+ 1;
     const getSymbol = () => symbol;
@@ -170,8 +192,20 @@ const Game = function () {
         }
     }
 
+    const restartGame = () => {
+        currentPlayerIndex = 0;
+        status = "playing";
+        players = [];
 
-    return {startGame, checkWinner, playTurn}
+        GameBoard.resetBoard();
+        DisplayHandler.resetDisplay();
+        MenuHandler.resetPlayers();
+        MenuHandler.setMenu('mode-selection');
+
+    }
+
+
+    return {startGame, checkWinner, playTurn, restartGame}
 }();
 
 

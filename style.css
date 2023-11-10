@@ -28,6 +28,7 @@ main > section {
     display: grid;
     grid-template-columns: repeat(3, min-content);
     grid-template-rows: repeat(3, min-content);
+    margin-bottom: 20px;
 }
 .square {
     background-color: white;
@@ -90,6 +91,14 @@ main > section {
 
 label {
     font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.current-player-container {
+    display: flex;
+}
+
+.current-player {
     font-weight: 600;
 }
 
