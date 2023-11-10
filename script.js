@@ -79,7 +79,6 @@ const DisplayHandler = function() {
 
     const currentPlayer = document.querySelector('.current-player');
     const currentTurnText = document.querySelector('.current-turn-text');
-    const winningPlayer = document.querySelector('.winning-player');
     const endGameText = document.querySelector('#end-game-text');
     const restartButton = document.querySelector('#restart-game');
     restartButton.addEventListener("click", () => Game.restartGame())
@@ -101,7 +100,7 @@ const DisplayHandler = function() {
             endGameText.textContent = "It's a tie! :("
             endGameText.classList.add('tie-text');
         } else {
-            winningPlayer.textContent = winner;
+            endGameText.textContent = winner + " wins!";
             endGameText.classList.add('winner-text');
         }
     }
@@ -118,6 +117,8 @@ const DisplayHandler = function() {
         currentPlayer.textContent = "";
         currentTurnText.classList.remove('hidden');
         endGameText.classList.add('hidden');
+        endGameText.classList.remove('winner-text');
+        endGameText.classList.remove('tie-text');
         restartButton.classList.add('hidden');
         squares.forEach((i) => {
             i.classList.remove('square-winning');
@@ -195,11 +196,11 @@ const Game = function () {
     }
 
     const playTurn = (index) => {
-        if(status !== "playing") return;
+        if(GameBoard.getSquare(index) !== "" || status !== "playing") return;
         if (GameBoard.setSquare(index, players[currentPlayerIndex].getSymbol())) {
+            checkWinner();
             currentPlayerIndex = (currentPlayerIndex == 0) ? 1 : 0;
             DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
-            checkWinner();
         }
         if(players[1].isAi) {
             playAiTurn();
