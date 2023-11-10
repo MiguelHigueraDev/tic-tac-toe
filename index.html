@@ -9,18 +9,66 @@
 </head>
 <body>
     <main>
-        <h1>Tic Tac Toe</h1>
-        <div class="game-board">
-            <div class="square" id="0"><span></span></div>
-            <div class="square" id="1"><span></span></div>
-            <div class="square" id="2"><span></span></div>
-            <div class="square" id="3"><span></span></div>
-            <div class="square" id="4"><span></span></div>
-            <div class="square" id="5"><span></span></div>
-            <div class="square" id="6"><span></span></div>
-            <div class="square" id="7"><span></span></div>
-            <div class="square" id="8"><span></span></div>
-        </div>
+        <section id="game" class="hidden">
+            <div>
+                <h1>Tic Tac Toe</h1>
+                <h5>It's [playername]'s turn!</h5>
+            </div>
+            <div class="game-board">
+                <div class="square" id="0"><span></span></div>
+                <div class="square" id="1"><span></span></div>
+                <div class="square" id="2"><span></span></div>
+                <div class="square" id="3"><span></span></div>
+                <div class="square" id="4"><span></span></div>
+                <div class="square" id="5"><span></span></div>
+                <div class="square" id="6"><span></span></div>
+                <div class="square" id="7"><span></span></div>
+                <div class="square" id="8"><span></span></div>
+            </div>
+        </section>
+
+        <section id="mode-selection" class="">
+            <div>
+                <h1>Tic Tac Toe</h1>
+                <h5>Select game mode</h5>
+            </div>
+            <div class="mode-wrapper">
+                <div class="mode-btn">
+                    <p class="emoji">🤖</p>
+                    <p class="text">Versus AI</p>
+                </div>
+                <div class="mode-btn">
+                    <p class="emoji">🧍</p>
+                    <p class="text">Player vs Player</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="player-creation-ai" class="hidden">
+            <div>
+                <label for="player-ai-name">Enter your name</label>
+            </div>
+            <input type="text" id="player-ai-name" placeholder="Leave blank for default" class="player-input">
+            <button type="button" class="player-button start" id="btn-ai">Start game</button>
+        </section>
+
+        <section id="player-creation-1" class="hidden">
+            <div>
+                <label for="player-1-name">Enter player one's name</label>
+            </div>
+            <input type="text" id="player-1-name" placeholder="Leave blank for default" class="player-input">
+            <button type="button" class="player-button" id="btn-1">Continue</button>
+        </section>
+
+        <section id="player-creation-2" class="hidden">
+            <div>
+                <label for="player-2-name">Enter player two's name</label>
+            </div>
+            <input type="text" id="player-2-name" placeholder="Leave blank for default" class="player-input">
+            <button type="button" class="player-button start" id="btn-2">Start game</button>
+        </section>
+        
+        
         
     </main>
 </body>

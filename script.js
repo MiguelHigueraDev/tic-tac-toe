@@ -9,8 +9,9 @@ const GameBoard = function() {
 
     const getSquare = (index) => board[index][0]; 
     const setSquare = (index, content) => {
-        if(index < 0 || index > 8) return "invalid";
+        if(getSquare(index).length > 0) return;
         board[index] = content; 
+        DisplayHandler.setSquare(index, content);
     }
 
     return {getBoard, getSquare, setSquare};
@@ -20,29 +21,35 @@ const DisplayHandler = function() {
 
     const squares = document.querySelectorAll('.square');
     squares.forEach((el) => {
-        el.addEventListener("click", () => setSquare(el))
+        el.addEventListener("click", () => Game.playTurn(el.id))
     })
 
-    const setSquare = (element) => {
-        if(GameBoard.getSquare(element.id).length !== 0) return "invalid";
-        GameBoard.setSquare(element.id, "O");
-        element.firstChild.textContent = "O";
-        console.log("set");
+    const getSquareElement = (index) => document.getElementById(index);
+
+    const setSquare = (index, content) => {
+        const el = getSquareElement(index);
+        el.firstChild.textContent = content;
     }
-    return {setSquare}
+
+    const highlightWinner = (combination) => {
+        // TODO
+    }
+
+    return {setSquare, highlightWinner}
 }();
 
-const Player = function(t) {
-    if(t !== "O" && t !== "X") return; 
-    const type = t;
+const Player = function(ty, na) {
+    if(ty !== "O" && ty !== "X") return; 
+    const type = ty;
+    const name = na;
     let wins = 0;
 
     const getWins = () => wins;
     const addWin = () => wins =+ 1;
     const getType = () => type;
+    const getName = () => name;
 
-
-    return {getWins, addWin, getType}
+    return {getWins, addWin, getType, getName}
 }
 
 const Game = function () {
@@ -50,13 +57,17 @@ const Game = function () {
         [0, 3, 6], [0, 1, 2], [2, 5, 8], [6, 7, 8], [1, 4, 7], [3, 4, 5], [6, 4, 2], [0, 4, 8]
     ];
 
+    let currentPlayer = "X";
+    let status = "playing";
+
+    let p1, p2;
+
     const startGame = () => {
-        const p1 = Player("X");
-        const p2 = Player("O");
-        return {p1, p2}
+        p1 = Player("Miguel", "O");
+        p2 = Player("Renzo", "X");
     }
 
-    const getWinner = () => {
+    const checkWinner = () => {
         let filledCombinations = 0;
         for(combination of winningCombinations) {
             let countX = 0;
@@ -67,21 +78,28 @@ const Game = function () {
                 if(sq.toUpperCase() === "O") countO++;
                 if(countX === 3 || countO === 3) {
                     const winner = countX > countO ? "X" : "O";
+                    status = "ended";
                     return console.log(winner + " wins with combination: " + combination);
                 }
-                if(countX + countO === 3) {
-                    filledCombinations++;
-                }
+                if(countX + countO === 3) filledCombinations++;
             }
         }
         // Tie
         if(filledCombinations === 8) {
             console.log("Tie");
+            status = "ended";
         } 
     }
 
+    const playTurn = (index) => {
+        if(status !== "playing") return;
+        GameBoard.setSquare(index, currentPlayer);
+        currentPlayer = (currentPlayer == "X") ? "O" : "X";
+        checkWinner();
+    }
 
-    return {startGame, getWinner}
+
+    return {startGame, checkWinner, playTurn}
 }();
 
 
