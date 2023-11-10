@@ -209,15 +209,12 @@ const Game = function () {
     const playAiTurn = () => {
         // TODO: Implement minimax algorithm to make AI unbeatable
         if(status !== "playing") return;
-        status = "ai-playing";
+
         const legalMove = getLegalMove();
-        setTimeout(() => {
-            GameBoard.setSquare(legalMove, players[1].getSymbol());
-            currentPlayerIndex = 0;
-            DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
-            status = "playing";
-            checkWinner();
-        }, 700);
+        GameBoard.setSquare(legalMove, players[1].getSymbol());
+        currentPlayerIndex = 0;
+        DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
+        status = "playing";
     }
 
     const getLegalMove = () => {
