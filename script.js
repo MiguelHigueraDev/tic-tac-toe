@@ -28,6 +28,7 @@ const MenuHandler = function() {
     const pvpNextBtn = document.getElementById('btn-1');
     const pvpStartBtn = document.getElementById('btn-2');
 
+    const playerAiInput = document.getElementById('player-ai-name');
     const player1Input = document.getElementById('player-1-name');
     const player2Input = document.getElementById('player-2-name');
 
@@ -48,6 +49,12 @@ const MenuHandler = function() {
         if(player2Name == "") player2Name = "Player 2";
         let player1Name = player1Input.value;
         Game.startGame(player1Name, player2Name);
+    })
+
+    aiStartBtn.addEventListener("click", () => {
+        let player1Name = playerAiInput.value;
+        if(player1Name == "") player1Name = "Human";
+        Game.startGame(player1Name, false);
     })
 
     const setMenu = (id) => {
@@ -91,7 +98,6 @@ const DisplayHandler = function() {
         endGameText.classList.remove('hidden');
         restartButton.classList.remove('hidden');
         if(winner === false) {
-            // TIE
             endGameText.textContent = "It's a tie! :("
             endGameText.classList.add('tie-text');
         } else {
@@ -112,6 +118,7 @@ const DisplayHandler = function() {
         currentPlayer.textContent = "";
         currentTurnText.classList.remove('hidden');
         endGameText.classList.add('hidden');
+        restartButton.classList.add('hidden');
         squares.forEach((i) => {
             i.classList.remove('square-winning');
             i.firstChild.textContent = "";
@@ -121,10 +128,11 @@ const DisplayHandler = function() {
     return {setSquare, highlightWinner, setCurrentPlayer, setGameResult, resetDisplay}
 }();
 
-const Player = function(sy, na) {
+const Player = function(sy, na, ai = false) {
     if(sy !== "O" && sy !== "X") return; 
     const symbol = sy;
     const name = na;
+    const isAi = ai;
     let wins = 0;
 
     // TODO: keep track of wins
@@ -133,7 +141,7 @@ const Player = function(sy, na) {
     const getSymbol = () => symbol;
     const getName = () => name;
 
-    return {getWins, addWin, getSymbol, getName}
+    return {getWins, addWin, getSymbol, getName, isAi}
 }
 
 const Game = function () {
@@ -148,14 +156,17 @@ const Game = function () {
     const startGame = (player1, player2) => {
         if(player2 === false) {
             // AI
+            const p1 = Player("X", player1);
+            const p2 = Player("O", "AI", true);
+            players = [p1, p2];
         } else {
             // PVP
             const p1 = Player("X", player1);
             const p2 = Player("O", player2);
             players = [p1, p2];
-            DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
-            MenuHandler.setMenu('game');
         }
+        DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
+        MenuHandler.setMenu('game');
     }
 
     const checkWinner = () => {
@@ -165,8 +176,8 @@ const Game = function () {
             let countP2 = 0;
             for(i of combination) {
                 const sq = GameBoard.getSquare(i);
-                if(sq.toUpperCase() === players[0].getSymbol()) countP1++;
-                if(sq.toUpperCase() === players[1].getSymbol()) countP2++;
+                if(sq === players[0].getSymbol()) countP1++;
+                if(sq === players[1].getSymbol()) countP2++;
                 if(countP1 === 3 || countP2 === 3) {
                     const winner = countP1 > countP2 ? players[0].getName() : players[1].getName();
                     status = "ended";
@@ -190,6 +201,26 @@ const Game = function () {
             DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
             checkWinner();
         }
+        if(players[1].isAi) {
+            playAiTurn();
+        }
+    }
+
+    const playAiTurn = () => {
+        // TODO: Implement minimax algorithm to make AI unbeatable
+        if(status !== "playing") return;
+        const legalMove = getLegalMove();
+        GameBoard.setSquare(legalMove, players[1].getSymbol());
+        currentPlayerIndex = 0;
+        DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
+        checkWinner();
+    }
+
+    const getLegalMove = () => {
+        const randomIndex = Math.floor(Math.random() * 9);
+        const sq = GameBoard.getSquare(randomIndex);
+        if(sq.length === 0) return randomIndex;
+        else return getLegalMove();
     }
 
     const restartGame = () => {
