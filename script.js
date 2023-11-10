@@ -199,17 +199,18 @@ const Game = function () {
         if (GameBoard.setSquare(index, players[currentPlayerIndex].getSymbol())) {
             currentPlayerIndex = (currentPlayerIndex == 0) ? 1 : 0;
             DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
+            checkWinner();
         }
         if(players[1].isAi) {
             playAiTurn();
+            checkWinner();
         }
-        checkWinner();
+
     }
 
     const playAiTurn = () => {
         // TODO: Implement minimax algorithm to make AI unbeatable
         if(status !== "playing") return;
-
         const legalMove = getLegalMove();
         GameBoard.setSquare(legalMove, players[1].getSymbol());
         currentPlayerIndex = 0;
