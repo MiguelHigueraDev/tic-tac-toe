@@ -137,7 +137,7 @@ const Player = function(sy, na, ai = false) {
 
     // TODO: keep track of wins
     const getWins = () => wins;
-    const addWin = () => wins =+ 1;
+    const addWin = () => wins += 1;
     const getSymbol = () => symbol;
     const getName = () => name;
 
@@ -209,11 +209,13 @@ const Game = function () {
     const playAiTurn = () => {
         // TODO: Implement minimax algorithm to make AI unbeatable
         if(status !== "playing") return;
+        status = "ai-playing";
         const legalMove = getLegalMove();
         setTimeout(() => {
             GameBoard.setSquare(legalMove, players[1].getSymbol());
             currentPlayerIndex = 0;
             DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
+            status = "playing";
             checkWinner();
         }, 700);
     }
