@@ -184,8 +184,8 @@ const Game = function () {
                     DisplayHandler.highlightWinner(combination);
                     return DisplayHandler.setGameResult(winner);
                 }
-                if(countP1 + countP2 === 3) filledCombinations++;
             }
+            if(countP1 + countP2 === 3) filledCombinations++;
         }
         // Tie
         if(filledCombinations === 8) {
