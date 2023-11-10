@@ -39,6 +39,10 @@ main > section {
     align-items: center;
 }
 
+.square-winning {
+    background-color: greenyellow;
+}
+
 .square span {
     font-size: 4rem;
 }
@@ -112,4 +116,12 @@ label {
 
 .hidden {
     display: none;
+}
+
+.winner-text {
+    color: yellowgreen;
+}
+
+.tie-text {
+    color: salmon;
 }

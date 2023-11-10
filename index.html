@@ -12,7 +12,8 @@
         <section id="game" class="hidden">
             <div>
                 <h1>Tic Tac Toe</h1>
-                <h5>It's [playername]'s turn!</h5>
+                <h5>It's <span class="current-player">XXX</span>'s turn!</h5>
+                <h3 id="end-game-text" class="hidden"><span class="winning-player"></span> wins!</h3>
             </div>
             <div class="game-board">
                 <div class="square" id="0"><span></span></div>
@@ -33,11 +34,11 @@
                 <h5>Select game mode</h5>
             </div>
             <div class="mode-wrapper">
-                <div class="mode-btn">
+                <div class="mode-btn" id="ai-btn">
                     <p class="emoji">🤖</p>
                     <p class="text">Versus AI</p>
                 </div>
-                <div class="mode-btn">
+                <div class="mode-btn" id="pvp-btn">
                     <p class="emoji">🧍</p>
                     <p class="text">Player vs Player</p>
                 </div>
@@ -64,6 +65,7 @@
             <div>
                 <label for="player-2-name">Enter player two's name</label>
             </div>
+            <input type="hidden" id="player-1-saved-name">
             <input type="text" id="player-2-name" placeholder="Leave blank for default" class="player-input">
             <button type="button" class="player-button start" id="btn-2">Start game</button>
         </section>
