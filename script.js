@@ -199,11 +199,11 @@ const Game = function () {
         if (GameBoard.setSquare(index, players[currentPlayerIndex].getSymbol())) {
             currentPlayerIndex = (currentPlayerIndex == 0) ? 1 : 0;
             DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
-            checkWinner();
         }
         if(players[1].isAi) {
             playAiTurn();
         }
+        checkWinner();
     }
 
     const playAiTurn = () => {
