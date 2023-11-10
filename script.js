@@ -203,7 +203,6 @@ const Game = function () {
         }
         if(players[1].isAi) {
             playAiTurn();
-            checkWinner();
         }
 
     }
@@ -218,6 +217,7 @@ const Game = function () {
             currentPlayerIndex = 0;
             DisplayHandler.setCurrentPlayer(players[currentPlayerIndex].getName());
             status = "playing";
+            checkWinner();
         }, 700);
 
     }
